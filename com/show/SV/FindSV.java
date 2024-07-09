@@ -1,5 +1,6 @@
 package com.show.SV;
 
+import java.util.ArrayList;
 //import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,7 +10,7 @@ import com.show.exception.NoExistException;
 
 public class FindSV {
 	/* 메뉴*/
-	public static void menu(Scanner s, List<MemberDTO> memberDTOs) {
+	public static void menu(Scanner s, ArrayList<MemberDTO> memberDTOs) {
 		boolean run=true;
 		while(run) {
 			System.out.println("1.아이디찾기 | 2.비밀번호찾기 | 3.닫기");
@@ -45,7 +46,7 @@ public class FindSV {
 	
 	
 	/* 메소드-아이디찾기 */
-	public static void idFind(Scanner s, List<MemberDTO> memberDTOs) throws NoExistException {
+	public static void idFind(Scanner s, ArrayList<MemberDTO> memberDTOs) throws NoExistException {
 		// 입력받기(name, pNo, ssn)
 		System.out.println("이름을 입력하세요.");
 		System.out.print(">>>");
@@ -73,7 +74,7 @@ public class FindSV {
 	}// --idFind()
 
 	/* 메소드-패스워드 찾기 */
-	public static void pwFind(Scanner s, List<MemberDTO> memberDTOs) throws NoExistException{
+	public static void pwFind(Scanner s, ArrayList<MemberDTO> memberDTOs) throws NoExistException{
 		// 입력받기(id, pNo, ssn)
 		System.out.println("아이디를 입력하세요.");
 		System.out.print(">>>");
@@ -103,7 +104,7 @@ public class FindSV {
 	}// --pwFind()
 
 	/* 메소드(공통)-리스트에서 pNo 검색하여 인덱스 리턴 */
-	public static int findIndex(String pno, List<MemberDTO> memberDTOs) throws NoExistException {
+	public static int findIndex(String pno, ArrayList<MemberDTO> memberDTOs) throws NoExistException {
 		int findIndex = 0; // 찾은 인덱스 번호 넣을 변수
 		for (MemberDTO findUser : memberDTOs) {
 			if (findUser.getpNo().equals(pno)) {// 휴대폰 번호가 같으면
@@ -118,7 +119,7 @@ public class FindSV {
 	}
 	
 	/* 메소드(공통)-리스트에서 id 검색하여 인덱스 리턴 */
-	public static int findIDIndex(String id, List<MemberDTO> memberDTOs) throws NoExistException {
+	public static int findIDIndex(String id, ArrayList<MemberDTO> memberDTOs) throws NoExistException {
 		int findIndex = 0; // 찾은 인덱스 번호 넣을 변수
 		for (MemberDTO findUser : memberDTOs) {
 			if (findUser.getId().equals(id)) {// 휴대폰 번호가 같으면

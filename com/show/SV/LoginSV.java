@@ -1,6 +1,6 @@
 package com.show.SV;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,7 +11,7 @@ import com.show.DTO.MemberDTO;
 public class LoginSV {
 
 	/* 메뉴 */
-	public static void menu(Scanner s, List<MemberDTO> memberDTOs, MemberDTO loginState) {
+	public static void menu(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
 		boolean run = true;
 		while (run) {
 			System.out.println("1. 로그인 | 2. 회원가입 | 3. 닫기");
@@ -20,6 +20,7 @@ public class LoginSV {
 			switch (select) {
 			case 1:
 				loginState = login(s, memberDTOs, loginState);
+				myPageSV.menu(s, memberDTOs, loginState);
 				break;
 			case 2:
 				register(s, memberDTOs, loginState);
@@ -33,9 +34,37 @@ public class LoginSV {
 		} // --while()
 
 	}// --menu()
+	
+	/* 부메뉴 - 로그인시 보이는 메뉴 */
+	public static void myMenu(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
+		boolean run = true;
+		while (run) {
+			System.out.println("1. 마이페이지 | 2. 로그아웃 | 3. 닫기 | 4. 찾아보기 ");
+			System.out.print(">>>");
+			int select = s.nextInt();
+			switch (select) {
+			case 1:
+				myPageSV.menu(s, memberDTOs, loginState);
+				break;
+			case 2:
+				loginState.setLoginStatus(false);
+				run = false;
+				break;
+			case 3:
+				run = false;
+				break;
+			case 4:
+				//SearchSV.menu(loginState, s, s, null, null, null, null, null);
+				break;
+			default:
+				System.out.println("1~4값만 입력하세요.");
+			}
+		} // --while()
+
+	}// --menu()
 
 	/* 메소드-로그인 */
-	public static MemberDTO login(Scanner s, List<MemberDTO> memberDTOs, MemberDTO loginState) {
+	public static MemberDTO login(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
 		
 		
 		System.out.println("로그인을 위한 ID / PW를 입력하세요.");
@@ -79,7 +108,7 @@ public class LoginSV {
 	}// --login()
 
 	/* 메소드-회원가입 */
-	public static void register(Scanner s, List<MemberDTO> memberDTOs, MemberDTO loginState) {
+	public static void register(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
 		MemberDTO join = new MemberDTO();
         System.out.println("회원 가입을 시작합니다.");
         
