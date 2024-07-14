@@ -2,11 +2,10 @@ package com.show.DTO;
 
 public class ShowDTO {
 	@Override
-	public String toString() {
-		return "title=" + title + "program=" + program + ", category=" + category
-								+"\n director=" + director + ", actor=" + actor
-								+"\n contents=" + contents;
-	}
+	   public String toString() {
+	      return "[" + program + "]" + title + " | " + category + "\n감독:" + director + "\n출연진:" + actor + "\n" + contents;
+	   }
+
 
 	// 필드
 	private String title;

@@ -10,17 +10,16 @@ import com.show.DTO.ShowDTO;
 import com.show.DTO.VarietyDTO;
 
 public class SearchSV {
-	public static ArrayList<ShowDTO> ShowDTO = new ArrayList<ShowDTO>();
-	private static ArrayList<ShowDTO> showDTO;
 
 	public static void menu(MemberDTO lSt, Scanner s, Scanner sL, ArrayList<MemberDTO> loginDTOs,
-			ArrayList<ReviewDTO> reviewDTOs, ArrayList<ShowDTO> showDTOs, ArrayList<DramaDTO> dramaDTOs, ArrayList<VarietyDTO> varietyDTOs) {
-		
+			ArrayList<ReviewDTO> reviewDTOs, ArrayList<ShowDTO> showDTOs, ArrayList<DramaDTO> dramaDTOs,
+			ArrayList<VarietyDTO> varietyDTOs) {
+
 		SearchListSV showList = new SearchListSV();
-		
+
 		// 리스트 가진 클래스 사용할 수 있는 빈 객체 생성
-		
-		// 메뉴 만들어서 
+
+		// 메뉴 만들어서
 		boolean run = true;
 		while (run) {
 			System.out.println("============ 검색 창 ==============");
@@ -33,43 +32,40 @@ public class SearchSV {
 
 			case 1:
 				System.out.println("검색메서드 진입합니다.");
-				search(ShowDTO, reviewDTOs, showDTOs, lSt, s, sL,  dramaDTOs, varietyDTOs, showList);
+				search(showDTOs, reviewDTOs, showDTOs, lSt, s, sL, dramaDTOs, varietyDTOs, showList);
 				break;
 
 			case 2:
-				
+
 				System.out.println("장르별메서드 진입합니다.");
-				categorySearch(ShowDTO, showList, reviewDTOs, showDTOs, lSt, s, sL);
+				categorySearch(showDTOs, showList, reviewDTOs, showDTOs, lSt, s, sL, showDTOs, dramaDTOs, varietyDTOs);
 				break;
-				
-				
 
 			case 3:
 				System.out.println("OTT 시리즈 보기");
-				showList.searchProgram("Netflix");
+				showList.searchProgram("Netflix", showDTOs, dramaDTOs, varietyDTOs);
 				System.out.println("------------------------------");
-				showList.searchProgram("Tving");
+				showList.searchProgram("Tving", showDTOs, dramaDTOs, varietyDTOs);
 				System.out.println("------------------------------");
-				showList.searchProgram("Tving, Netflix");
+				showList.searchProgram("Tving, Netflix", showDTOs, dramaDTOs, varietyDTOs);
 				break;
 
 			case 4:
 				System.out.println("메인메뉴로 돌아갑니다.");
-				run= false;
+				run = false;
 				break;
 
 			default:
 				System.out.println(" 잘못 입력 하셨습니다. 1 ~ 3까지의 번호를 입력 해주세요.");
 
-			}//스위치 종료
+			}// 스위치 종료
 		}
-		
 
 	}
 
-
-	private static void categorySearch(ArrayList<com.show.DTO.ShowDTO> showDTO2, SearchListSV showList, ArrayList<ReviewDTO> reviewDTOs,
-			ArrayList<com.show.DTO.ShowDTO> showDTOs, MemberDTO lSt, Scanner s, Scanner sL) {
+	private static void categorySearch(ArrayList<com.show.DTO.ShowDTO> showDTO2, SearchListSV showList,
+			ArrayList<ReviewDTO> reviewDTOs, ArrayList<com.show.DTO.ShowDTO> showDTOs, MemberDTO lSt, Scanner s,
+			Scanner sL, ArrayList<ShowDTO> showDTOs2, ArrayList<DramaDTO> dramaDTOs, ArrayList<VarietyDTO> varietyDTOs) {
 		System.out.println("----- 장르별 작품 보기 -----");
 		System.out.println("1.로맨스 \t2.액션");
 		System.out.println("3.코미디 \t4.SF");
@@ -80,61 +76,81 @@ public class SearchSV {
 
 		switch (no) { // 번호 입력받고 상세정보 제공하는 기능 필요함.
 		case 1:
-			showList.searchCategory("로맨스");
+			showList.searchCategory("로맨스", showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
 			break;
 		case 2:
-			showList.searchCategory("액션");
+			showList.searchCategory("액션",showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
 			break;
 		case 3:
-			showList.searchCategory("코미디");
+			showList.searchCategory("코미디",showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
 			break;
 		case 4:
-			showList.searchCategory("SF");
+			showList.searchCategory("SF",showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
 			break;
 		case 5:
-			showList.searchCategory("판타지");
+			showList.searchCategory("판타지",showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
 			break;
 		case 6:
-			showList.searchCategory("미스터리");
+			showList.searchCategory("미스터리",showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
 			break;
 		case 7:
-			showList.searchVariety("예능");
+			showList.searchVariety("예능",showDTOs, dramaDTOs, varietyDTOs);
 			System.out.println("--------------------------");
-			break;	
+			reference(sL, showDTOs2, dramaDTOs, varietyDTOs, showList);
+			break;
 		case 8:
 			System.out.println("-----------뒤로가기-----------");
 			break;
 		default:
 			System.out.println("1 ~ 6 번호만 입력하세요");
 		}// 장르 switch
-		
-		
+
 	}
 
-
-	private static void search(ArrayList<ShowDTO> showDTO, ArrayList<ReviewDTO> reviewDTOs, ArrayList<ShowDTO> showDTOs, MemberDTO lSt, Scanner s,
-			Scanner sL, ArrayList<DramaDTO> dramaDTOs, ArrayList<VarietyDTO> varietyDTOs, SearchListSV showList) {
+	private static void search(ArrayList<ShowDTO> showDTO, ArrayList<ReviewDTO> reviewDTOs, ArrayList<ShowDTO> showDTOs,
+			MemberDTO lSt, Scanner s, Scanner sL, ArrayList<DramaDTO> dramaDTOs, ArrayList<VarietyDTO> varietyDTOs,
+			SearchListSV showList) {
+		boolean run = true;
+		while (run) {
+			try {
+				System.out.println(" 검색 키워드를 입력해 주세요.");
+				System.out.print(">>>");
+				String kwd1 = sL.nextLine();
+				run = showList.search(kwd1, run, showDTOs, dramaDTOs, varietyDTOs, sL);
+				
+			} catch (Exception e) {
+				System.out.println("입력하신 제목을 다시 확인해주세요");
+				System.out.println(e);
+			}
+		}
 		
-		System.out.println(" 검색 하실 제목을 입력해 주세요.");
-		System.out.print(">>>");
-		String kwd1 = sL.nextLine();
-//		System.out.println(kwd1);
-		showList.searchTitle(kwd1);
+		reference(s, showDTOs, dramaDTOs, varietyDTOs, showList);
+		
+
+		
+
+	}// search close
+
+	private static void reference(Scanner s, ArrayList<ShowDTO> showDTOs, ArrayList<DramaDTO> dramaDTOs,
+			ArrayList<VarietyDTO> varietyDTOs, SearchListSV showList) {
 		System.out.println("몇번 컨텐츠를 조회하시겠습니까?");
 		System.out.print(">>>");
 		int pNo = s.nextInt();
-		
-		showList.searchNo(pNo);
-		
-		
-		
-	}//search close
 
-						
+		showList.searchNo(pNo, showDTOs, dramaDTOs, varietyDTOs);
+		
 	}
+
+}

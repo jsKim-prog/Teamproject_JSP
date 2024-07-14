@@ -1,70 +1,12 @@
 package com.show.SV;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import com.show.DTO.MemberDTO;
+import com.show.NoExistException;
 
-import com.show.exception.NoExistException;
-
-public class myPageSV {
-	/* 메뉴-로그인회원용 */
-	public static void menu(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
-		boolean run = true;
-		while (run) {
-			System.out.println("1.마이페이지 | 2.로그아웃 | 3.닫기 ");
-			int selInt = s.nextInt();
-			switch (selInt) {
-			case 1:
-				myInfo(loginState);
-				subMenu(s, memberDTOs, loginState);
-				break;
-			case 2:
-				loginState.setLoginStatus(false);
-				run = false;
-				break;
-			case 3:
-				run = false;
-				break;
-
-			default:
-				System.out.println("1~2값만 입력하세요.");
-			}// --switch()
-		} // --while()
-	}// --menu()
-
-	/* 부메뉴-마이페이지 */
-	public static void subMenu(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
-		boolean run = true;
-		while (run) {
-			System.out.println("1.회원정보 변경 | 2.회원탈퇴 | 3.로그아웃 | 4.닫기 ");
-			int selInt = s.nextInt();
-			switch (selInt) {
-			case 1:
-				modify(s, memberDTOs, loginState);
-				break;
-			case 2:
-				try {
-					delete(s, memberDTOs, loginState);
-				} catch (NoExistException e) {
-					String message = e.getMessage();
-					System.out.println(message);
-					// e.printStackTrace();
-				}
-				break;
-			case 3:
-				loginState.setLoginStatus(false);
-				run = false;
-				break;
-			case 4:
-				run = false;
-				break;
-			default:
-				System.out.println("1~2값만 입력하세요.");
-			}// --switch()
-		} // --while()
-	}// --subMenu()
+public class MyPageSV {
 
 	/* 메서드-회원정보보기 */
 	public static void myInfo(MemberDTO loginState) {
@@ -81,7 +23,8 @@ public class myPageSV {
 	}// --myInfo()
 
 	/* 메서드-회원정보수정 */
-	public static void modify(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState) {
+	public static void modify(Scanner s, MemberDTO loginState, ArrayList<MemberDTO> loginDTOs) {
+		myInfo(loginState);
 		boolean run = true;
 		MemberDTO modAccount = new MemberDTO();// 수정정보 저장용 빈객체 생성
 		modAccount = loginState;// 받은 현재의 로그인 정보를 넣어 수정되지 않을 정보 맞춰줌
@@ -110,8 +53,8 @@ public class myPageSV {
 				break;
 			case 4:
 				try {
-					int i = FindSV.findIDIndex(loginState.getId(), memberDTOs);
-					memberDTOs.add(i, modAccount);
+					int i = FIndSV.findIDIndex(loginState.getId(), loginDTOs);
+					loginDTOs.add(i, modAccount);
 				} catch (NoExistException e) {
 					String message = e.getMessage();
 					System.out.println(message);
@@ -129,8 +72,7 @@ public class myPageSV {
 	}// --modify()
 
 	/* 메서드-회원탈퇴 */
-	public static void delete(Scanner s, ArrayList<MemberDTO> memberDTOs, MemberDTO loginState)
-			throws NoExistException {
+	public static void delete(Scanner s, MemberDTO loginState, ArrayList<MemberDTO> loginDTOs) throws NoExistException {
 		boolean run = true;
 		while (run) {
 			System.out.println("회원을 탈퇴하시겠습니까? \n모든 서비스에 대한 권리를 상실하실 수 있습니다.");
@@ -142,7 +84,7 @@ public class myPageSV {
 				run = false;
 				break;
 			case 2: // 회원정보 재확인 후 탈퇴 진행
-				MemberDTO delMember = new MemberDTO(); // 삭제비교용 객체 생성
+				// MemberDTO delMember = new MemberDTO(); //삭제비교용 객체 생성
 				// 회원정보 재확인
 				System.out.println("회원정보를 재확인합니다.");
 				System.out.println("아이디를 입력하세요.");
@@ -151,16 +93,22 @@ public class myPageSV {
 				System.out.println("패스워드를 입력하세요.");
 				System.out.print(">>>");
 				String pw = s.next();
-
-				if (loginState.getId().equals(id) && loginState.getPw().equals(pw)) {// 재입력내용이 맞으면
-					int i = FindSV.findIDIndex(id, memberDTOs); // id로 해당 인덱스 번호 받아오기
-					delMember = memberDTOs.get(i);// 해당 인덱스 내용 delMember에 넣기(**추후 삭제인원 관리 시 이 객체 이동)
-					memberDTOs.remove(i); // 찾은 인덱스 지우기
-					System.out.println(delMember.getName() + "님의 회원탈퇴가 완료되었습니다. 안녕히 가세요.");
-					break;
-				} else {
-					throw new NoExistException("회원정보가 확인되지 않습니다.");
-				} // --if()
+				for (MemberDTO delMember : loginDTOs) {
+					if (loginState.getId().equals(id)) {// 재입력내용이 맞으면
+						if (loginState.getPw().equals(pw)) {
+							int i = FIndSV.findIDIndex(id, loginDTOs); // id로 해당 인덱스 번호 받아오기
+							delMember = loginDTOs.get(i);// 해당 인덱스 내용 delMember에 넣기(**추후 삭제인원 관리 시 이 객체 이동)
+							loginDTOs.remove(i); // 찾은 인덱스 지우기
+							System.out.println(delMember.getName() + "님의 회원탈퇴가 완료되었습니다. 안녕히 가세요.");
+							run = false;
+							break;
+						}
+					} else {
+						throw new NoExistException("회원정보가 확인되지 않습니다.");// ();
+					} // --if()
+				}
+				//System.out.println("회원정보가 확인되지 않습니다.");
+				break;
 			default:
 				System.out.println("1~2값만 입력하세요.");
 			}// --switch()

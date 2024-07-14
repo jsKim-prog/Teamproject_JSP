@@ -4,7 +4,7 @@ public enum Author {
 	GUEST,			//0
 	USER,			//1
 	MANAGER,		//2
-	SUPERMANAGER,	//3		
+	SUPERMANGER,	//3
 	ADMIN			//4
 
 }
